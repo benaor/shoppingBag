@@ -1,15 +1,15 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link>|
-    <router-link to="/about">About</router-link>
-  </nav>
+  <div id="nav">
+    <router-link to="/">Home</router-link>-
+    <router-link to="/basket">Shopping Bag (0)</router-link>
+  </div>
   <router-view />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
 
-defineComponent({
+export default defineComponent({
 
 })
 </script>
