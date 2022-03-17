@@ -1,32 +1,21 @@
 <template>
   <div class="home">
     <div class="products">
-      <div class="product">
-        <div
-          class="product-image"
-          style="background-image: url('https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg');"
-        ></div>
-        <h4>Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops</h4>
-        <p class="price">US$ 109.95</p>
-        <button>Add to bag</button>
-      </div>
-      <div class="product">
-        <div
-          class="product-image"
-          style="background-image: url('https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_.jpg');"
-        ></div>
-        <h4>Mens Casual Premium Slim Fit T-Shirts</h4>
-        <p class="price">US$ 22.30</p>
-        <button>Add to bag</button>
-      </div>
-      <div class="product">
-        <div
-          class="product-image"
-          style="background-image: url('https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg');"
-        ></div>
-        <h4>Mens Cotton Jacket</h4>
-        <p class="price">US$ 55.99</p>
-        <button>Add to bag</button>
+      <div
+        v-for="(product, index) in products"
+        :key="index"
+        class="product"
+        :class="{ inBag: isProductInBag(product) }"
+      >
+        <div class="product-image" :style="{ backgroundImage: 'url(' + product.image + ')' }"></div>
+        <h4>{{ product.title }}</h4>
+        <p class="price">US$ {{ product.price.toFixed(2) }}</p>
+        <button v-if="!isProductInBag(product)" @click="addToBag(product)">Add to bag</button>
+        <button
+          v-else
+          @click="$store.dispatch('removeFromBag', product.id)"
+          class="remove"
+        >Remove from bag</button>
       </div>
     </div>
   </div>
@@ -34,14 +23,27 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
+import { ProductType } from '../types/Product.types'
+import { mapState } from 'vuex';
+
 
 export default defineComponent({
 
   name: 'HomePage',
   data() {
-    return {}
+    return {
+    }
   },
-  methods: {}
+  computed: mapState(['products', 'productsInBag']),
+  methods: {
+    addToBag(product: ProductType): void {
+      product.quantity = 1
+      this.$store.dispatch('addToBag', product)
+    },
+    isProductInBag(product: ProductType) {
+      return this.productsInBag.find((item: ProductType) => item.id === product.id)
+    },
+  },
 })
 </script>
 
