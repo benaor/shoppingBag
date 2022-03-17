@@ -17,7 +17,7 @@
             <span class="amount">US$ {{ (product.price * product.quantity).toFixed(2) }}</span>
           </div>
         </div>
-        <div class="grand-total">Grand Total: US$ 22.30</div>
+        <div class="grand-total">Grand Total: US$ {{ orderTotal() }}</div>
       </template>
       <template v-else>
         <h4>No item in bag yet</h4>
@@ -27,13 +27,24 @@
 </template>
 
 <script lang="ts">
+import { ProductType } from "@/types/Product.types";
 import { defineComponent } from "vue";
 import { mapState } from "vuex";
 
 export default defineComponent({
   name: "BasketPage",
   computed: mapState(["products", "productsInBag"]),
-  methods: {},
+  methods: {
+    orderTotal() {
+      let total = 0
+      this.productsInBag.forEach((item: ProductType) => {
+        if (item.quantity) {
+          total += (item.price * item.quantity)
+        }
+      })
+      return total
+    }
+  },
 });
 </script>
 
