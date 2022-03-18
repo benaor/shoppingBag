@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import { ProductType } from '../types/Product.types'
-import { mapState } from 'vuex';
+import { mapState, storeKey } from 'vuex';
 
 
 export default defineComponent({
@@ -35,13 +35,22 @@ export default defineComponent({
     }
   },
   computed: mapState(['products', 'productsInBag']),
+  // computed: {
+  // productsInBag() {
+  //   return this.$store.state.productsInBag
+  // },
+  // products() {
+  //   return this.$store.state.products
+  // }
+  // },
   methods: {
     addToBag(product: ProductType): void {
       product.quantity = 1
       this.$store.dispatch('addToBag', product)
     },
     isProductInBag(product: ProductType) {
-      return this.productsInBag.find((item: ProductType) => item.id === product.id)
+      const isInBag = this.productsInBag.find((item: ProductType) => item.id == product.id)
+      return isInBag
     },
   },
 })
